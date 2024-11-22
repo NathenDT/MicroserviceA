@@ -26,4 +26,4 @@ python test.py
 
 # UML
 
-![alt text](/uml.png)
+![alt text](/uml.jpg)
