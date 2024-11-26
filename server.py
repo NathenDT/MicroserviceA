@@ -1,8 +1,7 @@
 import csv
 import json
-from datetime import datetime
-import pytz
 import zmq
+import os
 from cuid2 import cuid_wrapper
 
 cuid_generator = cuid_wrapper()
@@ -16,11 +15,9 @@ while True:
     message_data = json.loads(message.decode())
 
     json_string = message_data["json_string"]
-    client_timezone_str = message_data["client_timezone"]
+    output_dir = message_data["output_dir"]
 
-    client_timezone = pytz.timezone(client_timezone_str)
-
-    csv_file_path = f"{cuid_generator()}.csv"
+    csv_file_path = os.path.join(output_dir, f"{cuid_generator()}.csv")
 
     with open(csv_file_path, "w", newline="", encoding="utf-8") as csv_file:
         csv_writer = csv.writer(csv_file)
@@ -30,23 +27,13 @@ while True:
 
         for time_slot, entries in enumerate(json_string, start=1):
             for entry in entries:
-                original_timezone = pytz.timezone(entry["timezone"])
-                start_datetime = datetime.strptime(
-                    f"{entry['start_date']} {entry['start_time']}", "%Y-%m-%d %H:%M"
-                )
-                start_datetime = original_timezone.localize(start_datetime)
-
-                converted_datetime = start_datetime.astimezone(client_timezone)
-                converted_date = converted_datetime.strftime("%Y-%m-%d")
-                converted_time = converted_datetime.strftime("%H:%M")
-
                 csv_writer.writerow(
                     [
                         time_slot,
-                        converted_date,
-                        converted_time,
+                        entry["start_date"],
+                        entry["start_time"],
                         entry["duration"],
-                        client_timezone_str,
+                        entry["timezone"],
                     ]
                 )
 
