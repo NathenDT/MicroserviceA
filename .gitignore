@@ -1,0 +1,36 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Environments
+.env
+.venv
+venv/
+ENV/
+venv.bak/
+
+# Tests
+.pytest_cache/
+.tox/
+coverage.xml
+htmlcov/
+nosetests.xml
+*.cover
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IDE-specific files
+.idea/
+.vscode/
+
+# Other
+/outputs
